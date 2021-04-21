@@ -40,6 +40,7 @@ $list_users = get_the_full_list_users();
                 ?>
             </tbody>
         </table>
+
     </div>
     <footer>
         <p> CONTROL€ est une application Koffi Cup, fabriqué au sein de La Manu. Merci à Becris pour les icônes, stories pour les illustrations.</p>

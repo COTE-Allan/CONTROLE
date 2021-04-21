@@ -207,7 +207,7 @@ nav {
   font-weight: 400;
 }
 .input-container {
-  width: 300px;
+  width: 350px;
 }
 .the_form input {
   border: 3px #c6a49a solid;
@@ -279,7 +279,7 @@ nav {
 .tg {
   border-collapse: collapse;
   border-spacing: 0;
-  width: 70vw;
+  width: 100vw;
 }
 .tg td {
   border-color: black;
@@ -310,7 +310,21 @@ nav {
 thead .tg-0lax {
   font-weight: 600;
 }
-.tg-0lax .button {
+.tg-0lax .edit {
+  color: #c6a49a;
+}
+.tg-0lax .remove {
+  color: rgb(214, 51, 51);
+}
+.tg-0lax i {
+  font-size: 25px;
+  transition: color 200ms ease-in;
+}
+.tg-0lax i:hover {
+  cursor: pointer;
+  color: #757575;
+}
+.button {
   background: transparent;
 
   border: 3px solid #c6a49a;
@@ -331,10 +345,50 @@ thead .tg-0lax {
   background: #c6a49a;
   color: #f4ead5;
 }
-#detail_label {
+.detail_label {
   text-align: center;
-  padding-top: 0;
-  margin-top: 0;
+  padding: 0;
+  margin: 0;
+}
+
+#shield {
+  background-color: #00000079;
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1004;
+}
+.modale_confirmation {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  margin: auto;
+  z-index: 1005;
+  width: 75vw;
+  height: 35vh;
+  background-color: #c6a49a;
+  box-shadow: rgba(0, 0, 0, 0.35) 2px 2px 5px;
+}
+
+.modale_confirmation h2 {
+  color: #f4ead5 !important;
+  text-align: center;
+  font-size: 20px;
+}
+.modale_confirmation .button {
+  color: #f4ead5;
+  border: 3px solid #f4ead5;
+  width: 100px;
+  text-align: center;
+  padding: 0;
+}
+.modale_confirmation .button:hover {
+  color: #c6a49a;
+  background-color: #f4ead5;
 }
 /* ============================ */
 /* ========= FOOTER ===========*/
@@ -351,6 +405,7 @@ footer {
   align-items: center;
   opacity: 50%;
   transition: opacity 250ms ease-in-out;
+  margin-top: 15px;
 }
 footer:hover {
   opacity: 100%;
@@ -451,6 +506,15 @@ footer p {
   }
 }
 
+/* =============================== */
+/* ========= Peaufinage ===========*/
+/* =============================== */
+@media screen and (min-width: 450px) {
+  .modale_confirmation {
+    width: 50vw;
+    height: 30vh;
+  }
+}
 /* ============================== */
 /* ========= Version PC ===========*/
 /* ============================== */
@@ -477,6 +541,11 @@ footer p {
   }
   main div {
     padding: 5px;
+  }
+
+  .modale_confirmation {
+    width: 40vw;
+    height: 25vh;
   }
   /* ============================== */
   /* ========= HOME PAGE ===========*/
@@ -511,6 +580,10 @@ footer p {
   /* ========================== */
   .input-container {
     width: 500px;
+  }
+
+  .tg {
+    width: 70vw;
   }
   /* ============================ */
   /* ========= FOOTER ===========*/

@@ -25,6 +25,9 @@ function call_to_db()
 
 // LES REQUETES 
 
+// ========
+// LECTURE
+// ========
 // Obtenir la liste des motifs de recettes.
 function get_the_recipe_category()
 {
@@ -90,6 +93,7 @@ EOD;
     $user = $userStmt->fetchAll();
     return $user;
 }
+// Obtenir tout les recettes du user
 function get_the_recipes($id)
 {
 
@@ -97,7 +101,7 @@ function get_the_recipes($id)
     // Requête SQL
     $sql =
         <<<'EOD'
-        SELECT inc_amount, inc_cat_name, inc_receipt_date FROM incomes NATURAL JOIN incomes_categories WHERE user_id = :id;
+        SELECT inc_amount, inc_cat_name, inc_receipt_date, inc_id FROM incomes NATURAL JOIN incomes_categories WHERE user_id = :id;
 EOD;
     // Exécuter la requête
     $user_recipeStmt = $the_db->prepare($sql);
@@ -107,6 +111,7 @@ EOD;
     $user_recipe = $user_recipeStmt->fetchAll();
     return $user_recipe;
 }
+// Obtenir tout les dépenses du user
 function get_the_spend($id)
 {
 
@@ -114,7 +119,7 @@ function get_the_spend($id)
     // Requête SQL
     $sql =
         <<<'EOD'
-        SELECT exp_date, exp_amount, exp_label FROM expenses WHERE user_id = :id;
+        SELECT exp_date, exp_amount, exp_label, exp_id FROM expenses WHERE user_id = :id;
 EOD;
     // Exécuter la requête
     $user_recipeStmt = $the_db->prepare($sql);
@@ -124,135 +129,197 @@ EOD;
     $user_recipe = $user_recipeStmt->fetchAll();
     return $user_recipe;
 }
-// // Nb films par catégorie
-// function get_the_films_by_category()
-// {
-//     $the_db = call_to_db();
-//     // Requête SQL
-//     $sql =
-//         <<<'EOD'
-//     SELECT `category`, COUNT(*) 
-//     FROM film_list 
-//     GROUP BY `category`;
-// EOD;
-//     // Exécuter la requête
-//     $categoryStmt = $the_db->query($sql);
-//     // Récuperer les données :
-//     $f_b_category = $categoryStmt->fetchAll();
-//     return $f_b_category;
-// }
+// Obtenir une dépense précise
+function get_the_precise_spend($user_id, $exp_id)
+{
+    $the_db = call_to_db();
+    // Requête SQL
+    $sql =
+        <<<'EOD'
+        SELECT exp_amount, exp_label, user_id FROM expenses WHERE user_id = :user_id AND exp_id = :exp_id;
+EOD;
+    // Exécuter la requête
+    $userStmt = $the_db->prepare($sql);
+    $userStmt->bindValue(':user_id', $user_id);
+    $userStmt->bindValue(':exp_id', $exp_id);
+    $userStmt->execute();
+    // Récuperer les données :
+    $user = $userStmt->fetchAll();
+    return $user;
+}
+// Obtenir une recette précise
+function get_the_precise_recipes($user_id, $inc_id)
+{
+    $the_db = call_to_db();
+    // Requête SQL
+    $sql =
+        <<<'EOD'
+        SELECT inc_amount, inc_cat_id, user_id FROM incomes NATURAL JOIN incomes_categories WHERE user_id = :user_id AND inc_id = :inc_id;
+EOD;
+    // Exécuter la requête
+    $userStmt = $the_db->prepare($sql);
+    $userStmt->bindValue(':user_id', $user_id);
+    $userStmt->bindValue(':inc_id', $inc_id);
+    $userStmt->execute();
+    // Récuperer les données :
+    $user = $userStmt->fetchAll();
+    return $user;
+}
+// Dépenses total de tout les users
+function get_the_total_spend()
+{
 
-// // Fonction liste des films avec pagination.
-// function get_the_films($from, $to)
-// {
-//     $the_db = call_to_db();
-//     // Requête SQL
-//     $sql =
-//         <<<'EOD'
-//         SELECT `title`, `description`, `category`,  `film_id` 
-//         FROM film 
-//         NATURAL JOIN film_list 
-//         WHERE `film_id` BETWEEN :from AND :to;
-// EOD;
-//     // Exécuter la requête
-//     $filmsStmt = $the_db->prepare($sql);
-//     $filmsStmt->bindValue(':from', $from);
-//     $filmsStmt->bindValue(':to', $to);
-//     $filmsStmt->execute();
-//     // Récuperer les données :
-//     $films = $filmsStmt->fetchAll();
-//     return $films;
-// }
+    $the_db = call_to_db();
+    // Requête SQL
+    $sql =
+        <<<'EOD'
+        SELECT SUM(exp_amount) AS total_expenses FROM expenses;
+EOD;
+    // Exécuter la requête
+    $total_expenses_Stmt = $the_db->query($sql);
+    // Récuperer les données :
+    $total = $total_expenses_Stmt->fetchAll();
+    return $total;
+}
+function get_the_total_recipe()
+{
 
-// // Fonction liste des acteurs avec pagination.
-// function get_the_actor($from, $to)
-// {
-//     $the_db = call_to_db();
-//     // Requête SQL
-//     $sql =
-//         <<<'EOD'
-//         SELECT `actor_id`, `first_name`, `last_name`
-//         FROM actor
-//         WHERE `actor_id` BETWEEN :from AND :to;
-// EOD;
-//     // Exécuter la requête
-//     $actorStmt = $the_db->prepare($sql);
-//     $actorStmt->bindValue(':from', $from);
-//     $actorStmt->bindValue(':to', $to);
-//     $actorStmt->execute();
-//     // Récuperer les données :
-//     $films = $actorStmt->fetchAll();
-//     return $films;
-// }
+    $the_db = call_to_db();
+    // Requête SQL
+    $sql =
+        <<<'EOD'
+        SELECT SUM(inc_amount) AS total_recipe FROM incomes;
+EOD;
+    // Exécuter la requête
+    $total_expenses_Stmt = $the_db->query($sql);
+    // Récuperer les données :
+    $total = $total_expenses_Stmt->fetchAll();
+    return $total;
+}
+// ========
+// ECRITURE
+// ========
+// Ajouter une dépense
+function add_expense($date, $amount, $reason, $user)
+{
+    $the_db = call_to_db();
+    // Requête SQL
+    $sql =
+        <<<'EOD'
+        INSERT INTO expenses (exp_date, exp_amount, exp_label, user_id) VALUES (:date, :amount, :reason, :user);
+EOD;
+    // Exécuter la requête
+    $expenseStmt = $the_db->prepare($sql);
+    $expenseStmt->bindValue(':date', $date);
+    $expenseStmt->bindValue(':amount', $amount);
+    $expenseStmt->bindValue(':reason', $reason);
+    $expenseStmt->bindValue(':user', $user);
+    $expenseStmt->execute();
+}
+// Ajouter une recette
+function add_recipe($date, $amount, $category, $user)
+{
+    $the_db = call_to_db();
+    // Requête SQL
+    $sql =
+        <<<'EOD'
+        INSERT INTO incomes (inc_amount, inc_receipt_date, inc_cat_id, user_id) VALUES (:amount, :date, :category, :user);
+EOD;
+    // Exécuter la requête
+    $recipeStmt = $the_db->prepare($sql);
+    $recipeStmt->bindValue(':date', $date);
+    $recipeStmt->bindValue(':amount', $amount);
+    $recipeStmt->bindValue(':category', $category);
+    $recipeStmt->bindValue(':user', $user);
+    $recipeStmt->execute();
+}
+
+// Ajouter un user
+function add_user($date, $first_name, $last_name)
+{
+    $the_db = call_to_db();
+    // Requête SQL
+    $sql =
+        <<<'EOD'
+        INSERT INTO users (first_name, last_name, birth_date) VALUES (:first_name, :last_name, :date);
+EOD;
+    // Exécuter la requête
+    $recipeStmt = $the_db->prepare($sql);
+    $recipeStmt->bindValue(':date', $date);
+    $recipeStmt->bindValue(':first_name', $first_name);
+    $recipeStmt->bindValue(':last_name', $last_name);
+    $recipeStmt->execute();
+}
+
+// ============
+// DESTRUCTION
+// ============
+// Détruire l'income cible
+function remove_income($user_id, $inc_id)
+{
+    $the_db = call_to_db();
+    // Requête SQL
+    $sql =
+        <<<'EOD'
+        DELETE FROM incomes WHERE inc_id = :inc_id AND user_id = :user_id;
+EOD;
+    // Exécuter la requête
+    $incomeStmt = $the_db->prepare($sql);
+    $incomeStmt->bindValue(':user_id', $user_id);
+    $incomeStmt->bindValue(':inc_id', $inc_id);
+    $incomeStmt->execute();
+}
+// Détruire l'expense cible
+function remove_expense($user_id, $exp_id)
+{
+    $the_db = call_to_db();
+    // Requête SQL
+    $sql =
+        <<<'EOD'
+        DELETE FROM expenses WHERE exp_id = :exp_id AND user_id = :user_id;
+EOD;
+    // Exécuter la requête
+    $incomeStmt = $the_db->prepare($sql);
+    $incomeStmt->bindValue(':user_id', $user_id);
+    $incomeStmt->bindValue(':exp_id', $exp_id);
+    $incomeStmt->execute();
+}
 
 
-// // Fonction liste des films d'un acteur ciblé
-// function get_the_film_actor($the_actor_id)
-// {
-//     $the_db = call_to_db();
-//     // Requête SQL
-//     $sql =
-//         <<<'EOD'
-//         SELECT `title` 
-//         FROM film_actor 
-//         INNER JOIN film WHERE `actor_id` 
-//         LIKE :actor_id AND film_actor.`film_id` = film.`film_id`;
-// EOD;
-//     // Exécuter la requête
-//     $film_actorStmt = $the_db->prepare($sql);
-//     $film_actorStmt->bindValue(':actor_id', $the_actor_id);
-//     $film_actorStmt->execute();
-//     // Récuperer les données :
-//     $films = $film_actorStmt->fetchAll();
-//     return $films;
-// }
-// // Fonction liste des films d'un acteur ciblé
-// function get_the_actor_name($the_actor_id)
-// {
-//     $the_db = call_to_db();
-//     // Requête SQL
-//     $sql =
-//         <<<'EOD'
-//         SELECT `last_name`, `first_name`
-//         FROM actor
-//         WHERE `actor_id` LIKE :actor_id;
-// EOD;
-//     // Exécuter la requête
-//     $name_actorStmt = $the_db->prepare($sql);
-//     $name_actorStmt->bindValue(':actor_id', $the_actor_id);
-//     $name_actorStmt->execute();
-//     // Récuperer les données :
-//     $films = $name_actorStmt->fetchAll();
-//     return $films;
-// }
-
-// // Fonction liste ventes et stocks d'un magasin
-// function get_the_shop_details()
-// {
-//     $the_db = call_to_db();
-//     // Requête SQL
-//     $sql =
-//         <<<'EOD'
-//         SELECT `store`, `total_sales`
-//         FROM sales_by_store; 
-// EOD;
-//     // Exécuter la requête
-//     $shop_detailStmt = $the_db->query($sql);
-//     // Récuperer les données :
-//     $shop_detail = $shop_detailStmt->fetchAll();
-//     return $shop_detail;
-// }
-// function get_the_inventory()
-// {
-//     $the_db = call_to_db();
-//     // Requête SQL
-//     $sql =
-//         <<<'EOD'
-//         SELECT count(case when store_id=1 THEN 1 else null end) AS store1, count(case when store_id=2 THEN 1 else null end) AS store2 FROM inventory;
-// EOD;
-//     // Exécuter la requête
-//     $inventoryStmt = $the_db->query($sql);
-//     // Récuperer les données :
-//     $inventory = $inventoryStmt->fetchAll();
-//     return $inventory;
-// }
+// =======
+// EDITION
+// =======
+// Détruire l'expense cible
+function edit_expense($amount, $reason, $user_id, $exp_id)
+{
+    $the_db = call_to_db();
+    // Requête SQL
+    $sql =
+        <<<'EOD'
+        UPDATE expenses SET exp_amount = :amount, exp_label = :reason, user_id = :user_id WHERE exp_id = :exp_id;
+EOD;
+    // Exécuter la requête
+    $incomeStmt = $the_db->prepare($sql);
+    $incomeStmt->bindValue(':reason', $reason);
+    $incomeStmt->bindValue(':amount', $amount);
+    $incomeStmt->bindValue(':user_id', $user_id);
+    $incomeStmt->bindValue(':exp_id', $exp_id);
+    $incomeStmt->execute();
+}
+// Editer la recette
+function edit_recipe($amount, $category, $user_id, $inc_id)
+{
+    $the_db = call_to_db();
+    // Requête SQL
+    $sql =
+        <<<'EOD'
+        UPDATE incomes SET inc_amount = :amount, inc_cat_id = :category, user_id = :user_id WHERE inc_id = :inc_id;
+EOD;
+    // Exécuter la requête
+    $incomeStmt = $the_db->prepare($sql);
+    $incomeStmt->bindValue(':category', $category);
+    $incomeStmt->bindValue(':amount', $amount);
+    $incomeStmt->bindValue(':user_id', $user_id);
+    $incomeStmt->bindValue(':inc_id', $inc_id);
+    $incomeStmt->execute();
+}

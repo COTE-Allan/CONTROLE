@@ -1,21 +1,20 @@
 var ctx = document.getElementById('myChart').getContext('2d');
-    console.log('test');
+var chart = document.querySelector('#myChart');
+var total_spend = chart.dataset.spend;
+var total_recipe = chart.dataset.recipe;
 var myChart = new Chart(ctx, {
     type: 'doughnut',
-
     data: {
         labels: [
-            'Red',
-            'Blue',
-            'Yellow'
+            'Total des dépenses',
+            'Total des recettes',
           ],
           datasets: [{
-            label: 'My First Dataset',
-            data: [300, 50, 100],
+            label: 'Dashboard Chart',
+            data: [total_spend, total_recipe],
             backgroundColor: [
-              'rgb(255, 99, 132)',
-              'rgb(54, 162, 235)',
-              'rgb(255, 205, 86)'
+              'rgb(198,229,217)',
+              'rgb(214,129,137)',
             ],
             hoverOffset: 4,
           }]
