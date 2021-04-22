@@ -29,7 +29,7 @@ if ($transaction_type == "spend") {
 
 
 <main id="flex-container">
-    <?php if ($transaction_type == "spend") { ?>
+    <?php if ($transaction_type == "spend" && $spend) { ?>
         <div id="edit_spend">
             <h1>Editer une dépense</h1>
             <form method="POST" class="the_form">
@@ -68,8 +68,7 @@ if ($transaction_type == "spend") {
                 <?php } ?>
             </form>
         </div>
-    <?php } ?>
-    <?php if ($transaction_type == "recipe") { ?>
+    <?php } else if ($transaction_type == "recipe" && $recipe) { ?>
         <div id="edit_recipe">
             <h1>Editer une recette</h1>
             <form method="POST" class="the_form">
@@ -122,6 +121,8 @@ if ($transaction_type == "spend") {
 
             </form>
         </div>
+    <?php } else { ?>
+        <div class="lds-dual-ring large-load"></div>
     <?php } ?>
     <footer>
         <p> CONTROL€ est une application Koffi Cup, fabriqué au sein de La Manu. Merci à Becris pour les icônes, stories pour les illustrations.</p>

@@ -59,9 +59,7 @@
         </a>
 
         <div id="timestamp">
-            ??:??
-            <br>
-            ??/??/????
+            <div class="lds-dual-ring"></div>
         </div>
     </nav>
 

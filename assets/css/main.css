@@ -33,7 +33,7 @@ main {
   padding: 20px;
   color: #c6a49a;
   font-weight: 500;
-  margin: 30px 0 0 0;
+  margin: 40px 0 0 0;
 }
 #flex-container > div {
   display: flex;
@@ -107,8 +107,8 @@ button a {
   color: #f4ead5;
 }
 .chart-container {
-  width: 350px;
-  height: 350px;
+  width: 250px;
+  height: 250px;
 }
 /* Animation Mascotte */
 svg #Front_Screens {
@@ -349,6 +349,7 @@ thead .tg-0lax {
   text-align: center;
   padding: 0;
   margin: 0;
+  font-size: 25px;
 }
 
 #shield {
@@ -509,11 +510,26 @@ footer p {
 /* =============================== */
 /* ========= Peaufinage ===========*/
 /* =============================== */
-@media screen and (min-width: 450px) {
+@media screen and (min-width: 375px) {
+  .modale_confirmation {
+    width: 60vw;
+    height: 25vh;
+  }
+}
+@media screen and (min-width: 750px) {
   .modale_confirmation {
     width: 50vw;
-    height: 30vh;
+    height: 20vh;
   }
+}
+@media screen and (min-width: 1000px) {
+  .modale_confirmation {
+    width: 50vw;
+    height: 15vh;
+  }
+}
+.modale_confirmation h2 {
+  margin: 10px 0 0 0 !important;
 }
 /* ============================== */
 /* ========= Version PC ===========*/
@@ -575,6 +591,7 @@ footer p {
     margin-top: 10px;
     font: 35px "Montserrat", sans-serif;
   }
+
   /* ========================== */
   /* ========= FORM ===========*/
   /* ========================== */
@@ -592,5 +609,55 @@ footer p {
     margin: 1px;
     text-align: center;
     padding: 10px 15px 10px 15px;
+  }
+  /* ============================ */
+  /* ========= AUTRES ===========*/
+  /* =========================== */
+  .chart-container {
+    width: 350px;
+    height: 350px;
+  }
+}
+
+/* ============================ */
+/* ========= Loading ===========*/
+/* =========================== */
+.lds-dual-ring {
+  display: inline-block;
+  width: 70px;
+  height: 70px;
+}
+.lds-dual-ring:after {
+  content: " ";
+  display: block;
+  width: 34px;
+  height: 34px;
+  margin: 8px;
+  border-radius: 50%;
+  border: 6px solid #f4ead5;
+  border-color: #f4ead5 transparent #f4ead5 transparent;
+  animation: lds-dual-ring 1.2s linear infinite;
+}
+.large-load {
+  width: 100vw;
+  height: 100vh;
+}
+.large-load:after {
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  margin: auto;
+  width: 74px;
+  height: 74px;
+  border: 6px solid #c6a49a;
+  border-color: #c6a49a transparent #c6a49a transparent;
+}
+@keyframes lds-dual-ring {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
   }
 }
