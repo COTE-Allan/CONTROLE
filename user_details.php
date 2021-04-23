@@ -58,7 +58,7 @@ include 'essentials/menu.php';
                         ?>
                             <tr data-transaction_id=<?= $the_id ?> data-user_id="<?= $user_id ?>" data-transaction_type="spend">
                                 <th class="tg-0lax"> <?= $the_date ?></th>
-                                <th class="tg-0lax"><?= $the_amount ?>€</th>
+                                <th class="tg-0lax">- <?= $the_amount ?>€</th>
                                 <th class="tg-0lax"><?= $the_reason ?></th>
                                 <th class="tg-0lax">
                                     <a href=<?= "edit_transaction.php?user_id=" . $user_id . "&transaction_type=spend&transaction_id=" . $the_id ?>><i class=" las la-pen edit"></i></a>
@@ -98,7 +98,7 @@ include 'essentials/menu.php';
                         ?>
                             <tr data-transaction_id=<?= $the_id ?> data-user_id="<?= $user_id ?>" data-transaction_type="recipe">
                                 <th class="tg-0lax"> <?= $the_date ?></th>
-                                <th class="tg-0lax"><?= $the_amount ?>€</th>
+                                <th class="tg-0lax">+ <?= $the_amount ?>€</th>
                                 <th class="tg-0lax"><?= $the_reason ?></th>
                                 <th class="tg-0lax">
                                     <a href=<?= "edit_transaction.php?user_id=" . $user_id . "&transaction_type=recipe&transaction_id=" . $the_id ?>><i class=" las la-pen edit"></i></a>

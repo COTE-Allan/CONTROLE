@@ -73,9 +73,6 @@ EOD;
     $users = $usersStmt->fetchAll();
     return $users;
 }
-
-
-
 // Obtenir les users avec tout les détails.
 function get_precise_user($id)
 {
@@ -181,6 +178,7 @@ EOD;
     $total = $total_expenses_Stmt->fetchAll();
     return $total;
 }
+// Recette total de tout les users
 function get_the_total_recipe()
 {
 
@@ -194,6 +192,70 @@ EOD;
     $total_expenses_Stmt = $the_db->query($sql);
     // Récuperer les données :
     $total = $total_expenses_Stmt->fetchAll();
+    return $total;
+}
+// Obtenir toutes les dépenses DASHBOARD
+function get_all_the_recipes()
+{
+
+    $the_db = call_to_db();
+    // Requête SQL
+    $sql =
+        <<<'EOD'
+        SELECT first_name, inc_amount, inc_cat_name, inc_receipt_date FROM incomes NATURAL JOIN users NATURAL JOIN incomes_categories WHERE user_id = user_id AND inc_id = inc_id  ORDER BY inc_receipt_date DESC LIMIT 4;
+EOD;
+    // Exécuter la requête
+    $total_recipes_Stmt = $the_db->query($sql);
+    // Récuperer les données :
+    $total = $total_recipes_Stmt->fetchAll();
+    return $total;
+}
+// Obtenir toutes les dépenses DASHBOARD
+function get_all_the_spends()
+{
+
+    $the_db = call_to_db();
+    // Requête SQL
+    $sql =
+        <<<'EOD'
+        SELECT first_name, exp_amount, exp_label, exp_date FROM expenses NATURAL JOIN users WHERE user_id = user_id ORDER BY exp_date DESC LIMIT 4;
+EOD;
+    // Exécuter la requête
+    $total_recipes_Stmt = $the_db->query($sql);
+    // Récuperer les données :
+    $total = $total_recipes_Stmt->fetchAll();
+    return $total;
+}
+// Obtenir toutes les dépenses DASHBOARD
+function get_all_the_recipes_full()
+{
+
+    $the_db = call_to_db();
+    // Requête SQL
+    $sql =
+        <<<'EOD'
+        SELECT first_name, inc_amount, inc_cat_name, inc_receipt_date FROM incomes NATURAL JOIN users NATURAL JOIN incomes_categories WHERE user_id = user_id AND inc_id = inc_id  ORDER BY inc_receipt_date DESC LIMIT 15;
+EOD;
+    // Exécuter la requête
+    $total_recipes_Stmt = $the_db->query($sql);
+    // Récuperer les données :
+    $total = $total_recipes_Stmt->fetchAll();
+    return $total;
+}
+// Obtenir toutes les dépenses DASHBOARD
+function get_all_the_spends_full()
+{
+
+    $the_db = call_to_db();
+    // Requête SQL
+    $sql =
+        <<<'EOD'
+        SELECT first_name, exp_amount, exp_label, exp_date FROM expenses NATURAL JOIN users WHERE user_id = user_id ORDER BY exp_date DESC LIMIT 15;
+EOD;
+    // Exécuter la requête
+    $total_recipes_Stmt = $the_db->query($sql);
+    // Récuperer les données :
+    $total = $total_recipes_Stmt->fetchAll();
     return $total;
 }
 // ========
@@ -316,10 +378,10 @@ function edit_recipe($amount, $category, $user_id, $inc_id)
         UPDATE incomes SET inc_amount = :amount, inc_cat_id = :category, user_id = :user_id WHERE inc_id = :inc_id;
 EOD;
     // Exécuter la requête
-    $incomeStmt = $the_db->prepare($sql);
-    $incomeStmt->bindValue(':category', $category);
-    $incomeStmt->bindValue(':amount', $amount);
-    $incomeStmt->bindValue(':user_id', $user_id);
-    $incomeStmt->bindValue(':inc_id', $inc_id);
-    $incomeStmt->execute();
+    $Stmt = $the_db->prepare($sql);
+    $Stmt->bindValue(':category', $category);
+    $Stmt->bindValue(':amount', $amount);
+    $Stmt->bindValue(':user_id', $user_id);
+    $Stmt->bindValue(':inc_id', $inc_id);
+    $Stmt->execute();
 }
